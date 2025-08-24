@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: summarizer
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+server:
+  port: 8080
+
+openai:
+  url: https://ai.liara.ir/api/v1/688a0f7c3d0c49e74e3627c8/chat/completions
+  api-key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2ODg3MjFiYWIzMDUxZDBhOGJmN2FmMDgiLCJ0eXBlIjoiYXV0aCIsImlhdCI6MTc1NDYwOTI0Mn0.Fjg8fzjT4LBr4NLL_45AKPOq2rhwZWBC5GQBoI7YbZw
+  model: openai/gpt-4o-mini
+  prompt: You are a helpful assistant that summarizes text in 3 sentences.
