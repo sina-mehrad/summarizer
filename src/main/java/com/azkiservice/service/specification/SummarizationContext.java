@@ -1,4 +1,4 @@
-package com.azkiservice.service;
+package com.azkiservice.service.specification;
 
 import com.azkiservice.dto.res.SummarizationResponse;
 

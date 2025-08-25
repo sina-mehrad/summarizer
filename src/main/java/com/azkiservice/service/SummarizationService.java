@@ -2,6 +2,7 @@ package com.azkiservice.service;
 
 import com.azkiservice.dto.res.SummarizationResponse;
 import com.azkiservice.exception.RateLimitException;
+import com.azkiservice.service.specification.SummarizationContext;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class SummarizationService {
         return context.summarize(fileAsString);
     }
 
-    public String rateLimitFallback(String text, Throwable t) {
+    public SummarizationResponse rateLimitFallback(String text, Throwable t) {
         throw new RateLimitException();
     }
 

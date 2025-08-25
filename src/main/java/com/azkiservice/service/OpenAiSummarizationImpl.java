@@ -6,6 +6,7 @@ import com.azkiservice.dto.res.MessageReq;
 import com.azkiservice.dto.res.OpenAiSummarizationResponse;
 import com.azkiservice.dto.res.SummarizationResponse;
 import com.azkiservice.exception.ApiKeyException;
+import com.azkiservice.service.specification.SummarizationContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
