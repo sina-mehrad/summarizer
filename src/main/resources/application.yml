@@ -5,6 +5,8 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  aop:
+    proxy-target-class: true
 
 server:
   port: 8080
@@ -14,3 +16,15 @@ openai:
   api-key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2ODg3MjFiYWIzMDUxZDBhOGJmN2FmMDgiLCJ0eXBlIjoiYXV0aCIsImlhdCI6MTc1NDYwOTI0Mn0.Fjg8fzjT4LBr4NLL_45AKPOq2rhwZWBC5GQBoI7YbZw
   model: openai/gpt-4o-mini
   prompt: You are a helpful assistant that summarizes text in 3 sentences.
+
+springdoc:
+  swagger-ui:
+    path: /docs
+
+resilience4j:
+  ratelimiter:
+    instances:
+      summarizeServiceLimiter:
+        limitForPeriod: 2 # 2 requests per minute
+        limitRefreshPeriod: 1m
+        timeoutDuration: 0

@@ -1,48 +1,33 @@
 package com.azkiservice.service;
 
-import com.azkiservice.client.OpenAiFeignClient;
-import com.azkiservice.dto.req.SummarizationRequest;
-import com.azkiservice.dto.res.MessageReq;
-import com.azkiservice.dto.res.OpenAiSummarizationResponse;
 import com.azkiservice.dto.res.SummarizationResponse;
-import org.springframework.beans.factory.annotation.Value;
+import com.azkiservice.exception.RateLimitException;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
+@Slf4j
 @Service
 public class SummarizationService {
 
-    private final OpenAiFeignClient openAiFeignClient;
-    @Value("${openai.api-key}")
-    private String apiKey;
-    @Value("${openai.model}")
-    private String model;
-    @Value("${openai.prompt}")
-    private String prompt;
+    private final SummarizationContext context;
 
-    public SummarizationService(OpenAiFeignClient openAiFeignClient) {
-        this.openAiFeignClient = openAiFeignClient;
+    public SummarizationService(SummarizationContext context) {
+        this.context = context;
     }
 
+    @RateLimiter(name = "summarizeServiceLimiter", fallbackMethod = "rateLimitFallback")
     public SummarizationResponse summarize(MultipartFile file) {
         String fileAsString = extractedAsString(file);
+        return context.summarize(fileAsString);
+    }
 
-        List<MessageReq> messageReqs = new ArrayList<>();
-        messageReqs.add(new MessageReq("system", prompt));
-        messageReqs.add(new MessageReq("user", fileAsString));
-
-        SummarizationRequest request = new SummarizationRequest(model, messageReqs);
-
-        OpenAiSummarizationResponse summarize = openAiFeignClient.summarize("Bearer " + apiKey, request);
-
-        String content = summarize.choices().getFirst().message().content();
-
-        return new SummarizationResponse(content);
+    public String rateLimitFallback(String text, Throwable t) {
+        throw new RateLimitException();
     }
 
     private String extractedAsString(MultipartFile file) {
@@ -53,6 +38,7 @@ public class SummarizationService {
         try {
             return new String(file.getBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {
+            log.error("Error while converting file to string", e);
             throw new RuntimeException(e);
         }
     }

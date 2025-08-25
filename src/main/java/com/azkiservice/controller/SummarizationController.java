@@ -2,6 +2,7 @@ package com.azkiservice.controller;
 
 import com.azkiservice.dto.res.SummarizationResponse;
 import com.azkiservice.service.SummarizationService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,9 @@ public class SummarizationController {
         this.summarizationService = summarizationService;
     }
 
-    @PostMapping("summarize")
+
+    @PostMapping(value = "summarize", consumes = "multipart/form-data")
+    @Operation(summary = "Summarize a long input file using OpenAI") // TODO: How to upload a file using Swagger?
     public ResponseEntity<SummarizationResponse> summarize(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(summarizationService.summarize(file));
     }
