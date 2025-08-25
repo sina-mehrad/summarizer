@@ -23,7 +23,7 @@ public class SummarizationService {
 
     @RateLimiter(name = "summarizeServiceLimiter", fallbackMethod = "rateLimitFallback")
     public SummarizationResponse summarize(MultipartFile file) {
-        String fileAsString = extractedAsString(file);
+        String fileAsString = readFileAsString(file);
         return context.summarize(fileAsString);
     }
 
@@ -31,7 +31,7 @@ public class SummarizationService {
         throw new RateLimitException();
     }
 
-    private String extractedAsString(MultipartFile file) {
+    private String readFileAsString(MultipartFile file) {
         if (file.isEmpty()) {
             throw new RuntimeException("Empty file");
         }

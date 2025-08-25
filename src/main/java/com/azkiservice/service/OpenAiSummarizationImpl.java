@@ -2,7 +2,7 @@ package com.azkiservice.service;
 
 import com.azkiservice.client.OpenAiFeignClient;
 import com.azkiservice.dto.req.SummarizationRequest;
-import com.azkiservice.dto.res.MessageReq;
+import com.azkiservice.dto.req.MessageReq;
 import com.azkiservice.dto.res.OpenAiSummarizationResponse;
 import com.azkiservice.dto.res.SummarizationResponse;
 import com.azkiservice.exception.ApiKeyException;
